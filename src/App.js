@@ -1,26 +1,50 @@
 import React from 'react';
-import logo from './logo.svg';
+import 'tachyons';
 import './App.css';
+import Title from './Title';
+import Login from './Login';
+import Register from './Register';
+import EvidenceList from './EvidenceList';
+import CreateEvidence from './CreateEvidence';
+import Generated from './Generated';
+import EvidenceDetails from './EvidenceDetails';
+import {Route, Link, Redirect} from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: false
+    }
+  }
+
+  loginHandle = (event) => {
+    //set this state to true only after confirming credentials
+    this.setState({ loggedIn: true });
+  }
+
+  render() {
+    return (
+      <div className="App tc">
+        <Route exact strict path="/" render={
+          () => {
+            return(
+              <div className="tc pa3">
+                <Title />
+                <Login loginDone={this.loginHandle.bind(this)}/>
+                <br/><Link className="link" to="/register" exact> Click here to Register </Link>
+              </div>
+            );
+          }
+        }/>
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/keygenerated" component={Generated} />
+        <Route exact path="/evidencelist" component={EvidenceList} />
+        <Route exact path="/createevidence" component={CreateEvidence} />
+        <Route exact path="/evidencedetails" component={EvidenceDetails} />
+      </div>
+    );
+  }
 }
 
 export default App;
