@@ -9,6 +9,7 @@ import {
 import Signing from "./signing";
 import Utils from "./utils";
 
+// Create Transaction
 const createTransaction = (keys, signer, payload) => {
 	const encodedPayload = Utils.encode(payload);
 
@@ -32,6 +33,7 @@ const createTransaction = (keys, signer, payload) => {
 	return transaction;
 };
 
+// Create Batch
 const createBatch = (keys, signer, transactions) => {
 	if (!Array.isArray(transactions)) transactions = [transactions];
 
@@ -49,6 +51,7 @@ const createBatch = (keys, signer, transactions) => {
 	return batch;
 };
 
+// Create Encode Batches
 const encodeBatches = (batches) => {
 	if (!Array.isArray(batches)) batches = [batches];
 
@@ -57,7 +60,8 @@ const encodeBatches = (batches) => {
 	return batchList.slice();
 };
 
-const encodeAll = (keys, signer, payloads) => {
+// Create Encoded Payloads
+const encodeAllPayloads = (keys, signer, payloads) => {
 	if (!Array.isArray(payloads)) payloads = [payloads];
 
 	const transactionArray = payloads.map((pl) =>
@@ -69,4 +73,9 @@ const encodeAll = (keys, signer, payloads) => {
 	);
 };
 
-export default { createTransaction, createBatch, encodeBatches, encodeAll };
+export default {
+	createTransaction,
+	createBatch,
+	encodeBatches,
+	encodeAllPayloads,
+};

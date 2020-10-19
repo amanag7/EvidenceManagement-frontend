@@ -27,7 +27,7 @@ const getKeys = () => {
 	return Utils.decode(storedKeys);
 };
 
-// Signer
+// Signer related functions
 const createSigner = (keys) => {
 	const context = createContext("secp256k1");
 	const privateKey = Secp256k1PrivateKey.fromHex(keys.privateKey);

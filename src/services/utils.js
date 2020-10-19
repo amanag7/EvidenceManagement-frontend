@@ -29,14 +29,16 @@ const hash = (str, length = 128) =>
 const NAMESPACE = hash(FAMILY, NAMESPACE_BASE_LENGTH);
 
 const getEvidenceAddress = (key) =>
-	NAMESPACE +
-	TYPE_PREFIXES.EVIDENCE_PREFIX +
-	hash(key, NAMESPACE_OFFSET_LENGTH);
+	`${NAMESPACE}${TYPE_PREFIXES.EVIDENCE_PREFIX}${hash(
+		key,
+		NAMESPACE_OFFSET_LENGTH
+	)}`;
 
 const getPersonAddress = (key) =>
-	NAMESPACE +
-	TYPE_PREFIXES.PERSON_PREFIX +
-	hash(key, NAMESPACE_OFFSET_LENGTH);
+	`${NAMESPACE}${TYPE_PREFIXES.PERSON_PREFIX}${hash(
+		key,
+		NAMESPACE_OFFSET_LENGTH
+	)}`;
 
 const getType = (address) =>
 	address.slice(NAMESPACE_BASE_LENGTH + 1, NAMESPACE_BASE_LENGTH + 3) ===
