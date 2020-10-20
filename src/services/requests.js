@@ -4,7 +4,7 @@ import { encodeAllPayloads } from "./transactions";
 import Utils from "./utils";
 
 // Urls
-const URL = process.env.REACT_APP_REST_API_URL || "http://localhost:4000";
+const URL = process.env.REACT_APP_REST_API_URL || "http://localhost:8008";
 const BATCHES_URL = "/batches";
 const BATCH_STATUS_URL = "/batch_statuses";
 const STATE_URL = "/state";
@@ -22,14 +22,16 @@ const submitPayloads = (keys, signer, payloads) => {
 		})
 		.then((res) => res.data);
 };
-// TODO: Use Batch status api
+
+const getBatchStatus = (id) =>
+	axios.get(`${URL}${BATCH_STATUS_URL}?id=${id}`).then((res) => res.data);
 
 // States
 const getStates = (prefix, start = null, limit = null, reverse = null) => {
 	let url = `${URL}${STATE_URL}?address=${prefix}`;
-	if (!start) url = `${url}&start=${start}`;
-	if (!limit) url = `${url}&limit=${limit}`;
-	if (!reverse) url = `${url}&reverse=${reverse}`;
+	if (start) url = `${url}&start=${start}`;
+	if (limit) url = `${url}&limit=${limit}`;
+	if (reverse) url = `${url}&reverse=${reverse}`;
 	return axios.get(url).then((res) => res.data);
 };
 
@@ -41,10 +43,28 @@ const getState = (address) => {
 };
 
 // Blocks
-// TODO: Use Blocks api
+const getBlocks = (start = null, limit = null, reverse = null) => {
+	let url = `${URL}${BLOCKS_URL}`;
+	if (start) url = `${url}?start=${start}`;
+	if (limit) url = `${url}${start ? "&" : "?"}limit=${limit}`;
+	if (reverse) url = `${url}reverse=${reverse}`;
+	return axios.get(url).then((res) => res.data);
+};
+
+const getBlock = (id) =>
+	axios.get(`${URL}${BLOCKS_URL}/${id}`).then((res) => res.data);
 
 // Transactions
-// TODO: Use transactions api
+const getTransactions = (start = null, limit = null, reverse = null) => {
+	let url = `${URL}${TRANSACTIONS_URL}`;
+	if (start) url = `${url}?start=${start}`;
+	if (limit) url = `${url}${start ? "&" : "?"}&limit=${limit}`;
+	if (reverse) url = `${url}&reverse=${reverse}`;
+	return axios.get(url).then((res) => res.data);
+};
+
+const getTransaction = (id) =>
+	axios.get(`${URL}${TRANSACTIONS_URL}/${id}`).then((res) => res.data);
 
 // Status
 const getStatus = () =>
@@ -54,8 +74,13 @@ const getPeers = () => axios.get(`${URL}${PEERS_URL}`).then((res) => res.data);
 
 export default {
 	submitPayloads,
+	getBatchStatus,
 	getStates,
 	getState,
+	getBlocks,
+	getBlock,
+	getTransactions,
+	getTransaction,
 	getStatus,
 	getPeers,
 };

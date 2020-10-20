@@ -6,21 +6,25 @@ import Utils from "./utils";
 const KEY_NAME = process.env.REACT_APP_EMS_KEYS || "emsKeys";
 
 // Public & Private keys related functions
-const createKeys = () => {
+const verifyKeys = (privateKey) => Secp256k1PrivateKey.fromHex(privateKey);
+
+const createKeys = (privateKey = null) => {
 	const context = createContext("secp256k1");
-	const privateKey = context.newRandomPrivateKey();
-	const publicKey = context.getPublicKey(privateKey).asHex();
-	return { publicKey, privateKey: privateKey.asHex() };
+	const privateKeyBuffer = privateKey
+		? verifyKeys(privateKey)
+		: context.newRandomPrivateKey();
+	const publicKey = context.getPublicKey(privateKeyBuffer).asHex();
+	return { publicKey, privateKey: privateKeyBuffer.asHex() };
 };
 
 const saveKeys = (keys) => localStorage.setItem(KEY_NAME, Utils.encode(keys));
 
 const deleteKeys = () => localStorage.clear();
 
-const getKeys = () => {
+const getKeys = (privateKey = null) => {
 	const storedKeys = localStorage.getItem(KEY_NAME);
 	if (!storedKeys) {
-		const keys = createKeys();
+		const keys = createKeys(privateKey);
 		saveKeys(keys);
 		return keys;
 	}
@@ -30,13 +34,14 @@ const getKeys = () => {
 // Signer related functions
 const createSigner = (keys) => {
 	const context = createContext("secp256k1");
-	const privateKey = Secp256k1PrivateKey.fromHex(keys.privateKey);
+	const privateKey = verifyKeys(keys.privateKey);
 	return new CryptoFactory(context).newSigner(privateKey);
 };
 
 const sign = (signer, header) => signer.sign(header);
 
 export default {
+	verifyKeys,
 	createKeys,
 	getKeys,
 	saveKeys,
