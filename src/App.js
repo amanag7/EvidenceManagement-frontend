@@ -1,6 +1,5 @@
 import React from "react";
 import "tachyons";
-import Title from "./components/Title";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import EvidenceList from "./pages/EvidenceList";
@@ -12,12 +11,16 @@ import { Route, Link, Redirect } from "react-router-dom";
 class App extends React.Component {
 	constructor() {
 		super();
+
 		this.state = {
 			loggedIn: false,
-		};
+			user: {}
+		}
+
+		this.loginHandle = this.loginHandle.bind(this)
 	}
 
-	loginHandle = (event) => {
+	loginHandle = (publicKey, privateKey) => {
 		//set this state to true only after confirming credentials
 		this.setState({ loggedIn: true });
 	};
@@ -29,20 +32,18 @@ class App extends React.Component {
 					exact
 					strict
 					path="/"
-					render={() => {
+					render={props => {
 						return (
-							<div className="tc pa3">
-								<Title />
+							<div>
 								<Login
-									loginDone={this.loginHandle.bind(
-										this
-									)}
+									loginHandle={this.loginHandle}
 								/>
 								<br />
 								<Link
 									className="link"
 									to="/register"
-									exact>
+									exact
+								>
 									{" "}
 									Click here to Register{" "}
 								</Link>
@@ -50,8 +51,30 @@ class App extends React.Component {
 						);
 					}}
 				/>
-				<Route exact path="/register" component={Register} />
-				<Route exact path="/keygenerated" component={Generated} />
+				<Route
+					exact
+					path="/register"
+					component={Register}
+				/>
+				<Route 
+					exact
+					path="/keygenerated"
+					render={()=> {
+						return(
+							<div>
+								<Generated />
+								<br/>
+								<Link
+									className="link"
+									to="/"
+									exact>
+									{" "}
+									Login now{" "}
+								</Link>
+							</div>
+						);
+					}}
+				/>
 				<Route
 					exact
 					path="/evidencelist"

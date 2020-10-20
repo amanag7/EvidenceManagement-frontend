@@ -10,7 +10,7 @@ const Title = () => {
 				height="75px"
 				width="auto"
 			/>
-			<h1>Evidence Manager</h1>
+			<h1 className="ml3">Evidence Manager</h1>
 		</div>
 	);
 };
