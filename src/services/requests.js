@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { encodeAllPayloads } from "./transactions";
+import Transaction from "./transaction";
 import Utils from "./utils";
 
 // Urls
@@ -15,7 +15,7 @@ const PEERS_URL = "/peers";
 
 // Requests
 const submitPayloads = (keys, signer, payloads) => {
-	const encodedBatch = encodeAllPayloads(keys, signer, payloads);
+	const encodedBatch = Transaction.encodeAllPayloads(keys, signer, payloads);
 	return axios
 		.post(`${URL}${BATCHES_URL}`, encodedBatch, {
 			headers: { "Content-Type": "application/octet-stream" },

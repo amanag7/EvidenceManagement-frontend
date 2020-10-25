@@ -12,7 +12,6 @@ import Utils from "./utils";
 // Create Transaction
 const createTransaction = (keys, signer, payload) => {
 	const encodedPayload = Utils.encode(payload);
-
 	const transactionHeaderBytes = TransactionHeader.encode({
 		familyName: Utils.FAMILY_NAME,
 		familyVersion: Utils.FAMILY_VERSION,
