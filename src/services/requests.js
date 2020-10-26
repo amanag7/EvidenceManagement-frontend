@@ -4,7 +4,7 @@ import Transaction from "./transaction";
 import Utils from "./utils";
 
 // Urls
-const URL = process.env.REACT_APP_REST_API_URL || "http://localhost:8008";
+const URL = process.env.REACT_APP_REST_API_URL || "http://localhost:4000";
 const BATCHES_URL = "/batches";
 const BATCH_STATUS_URL = "/batch_statuses";
 const STATE_URL = "/state";

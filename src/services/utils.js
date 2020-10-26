@@ -1,8 +1,9 @@
 import { createHash } from "crypto";
 
 // Constants
-const FAMILY = process.env.REACT_APP_FAMILY_NAME;
-const FAMILY_VERSION = process.env.REACT_APP_FAMILY_VERSION;
+const FAMILY_NAME =
+	process.env.REACT_APP_FAMILY_NAME || "evidence_management_system";
+const FAMILY_VERSION = process.env.REACT_APP_FAMILY_VERSION || "0.0";
 
 const TYPES = {
 	EVIDENCE: "EVIDENCE",
@@ -17,8 +18,7 @@ const TYPE_PREFIXES = {
 	PERSON_PREFIX: "01",
 };
 // Encoding Decoding helpers
-const encode = (obj) =>
-	Buffer.from(JSON.stringify(obj, Object.keys(obj).sort()));
+const encode = (obj) => Buffer.from(JSON.stringify(obj));
 
 const decode = (buf) => JSON.parse(buf.toString());
 
@@ -26,7 +26,7 @@ const hash = (str, length = 128) =>
 	createHash("sha512").update(str).digest("hex").slice(0, length);
 
 // Addresses and Types
-const NAMESPACE = hash(FAMILY, NAMESPACE_BASE_LENGTH);
+const NAMESPACE = hash(FAMILY_NAME, NAMESPACE_BASE_LENGTH);
 
 const getEvidenceAddress = (key) =>
 	`${NAMESPACE}${TYPE_PREFIXES.EVIDENCE_PREFIX}${hash(
@@ -50,10 +50,10 @@ const getType = (address) =>
 const getNonce = () => (Math.random() * 10 ** 18).toString(36);
 
 export default {
-	FAMILY,
-	TYPES,
-	NAMESPACE,
+	FAMILY_NAME,
 	FAMILY_VERSION,
+	NAMESPACE,
+	TYPES,
 	encode,
 	decode,
 	hash,

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Signing, Payload, Requests } from "../services";
+import { Signing, Payload, Requests, Utils } from "../services";
 
 const register = (name, email) => {
+	// Requests.getPeers().then((res) => console.log(res));
 	if (name !== "" && email !== "") {
 		const keys = Signing.getKeys();
 		const signer = Signing.createSigner(keys);

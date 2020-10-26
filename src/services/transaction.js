@@ -59,17 +59,15 @@ const encodeBatches = (batches) => {
 	return batchList.slice();
 };
 
-// Create Encoded Payloads
+// Create Payloads to Batches
 const encodeAllPayloads = (keys, signer, payloads) => {
 	if (!Array.isArray(payloads)) payloads = [payloads];
 
 	const transactionArray = payloads.map((pl) =>
-		createTransaction(keys.privateKey, signer, pl)
+		createTransaction(keys, signer, pl)
 	);
 
-	return encodeBatches(
-		createBatch(keys.privateKey, signer, transactionArray)
-	);
+	return encodeBatches(createBatch(keys, signer, transactionArray));
 };
 
 export default {
