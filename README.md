@@ -6,7 +6,7 @@ Evidence Management System based on Hyperledger Sawtooth using IPFS with PBFT or
 
 **Check out the Transaction Processor code and Full Documentation [here](https://github.com/Shritesh99/Evidence-Management-System)**
 
-![arch]("/img/arch.png")
+![arch](/img/arch.png)
 
 ### Screenshots
 
