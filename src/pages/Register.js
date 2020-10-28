@@ -1,13 +1,14 @@
-import React from 'react';
-import Title from '../components/Title';
+import React from "react";
+import Title from "../components/Title";
+import { Signing, Payload, Requests } from "../services";
 
 class Register extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		this.state = {
-			username:'',
-			email: ''
+			name: "",
+			email: "",
 		};
 
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -16,36 +17,62 @@ class Register extends React.Component {
 	}
 
 	handleUsernameChange(event) {
-		this.setState({username: event.target.value});
+		this.setState({ name: event.target.value });
 	}
 
 	handleEmailChange(event) {
-		this.setState({email: event.target.value});
+		this.setState({ email: event.target.value });
 	}
 
 	handleSubmit(event) {
 		// alert(`Hey ${this.state.username} with mail: ${this.state.email}`);
 		event.preventDefault();
-		// Take username and email data from here to generate the keys
+		if (this.state.name !== "" && this.state.email !== "") {
+			const keys = Signing.getKeys();
+			// TODO: Display generated keys
+			// keys => {
+			//  publicKey: STRING,
+			//  privateKey: STRING
+			// }
+			const signer = Signing.createSigner(keys);
+			const payload = Payload.createPersonPayload(
+				this.state.name,
+				this.state.email
+			);
+			Requests.submitPayloads(keys, signer, payload)
+				.then((data) => {
+					Requests.getBatchStatus(data.link).then((res) => {
+						console.log(res);
+						// TODO: Handle batch status
+						// res => {
+						//  id: STRING,
+						//  invalid_transactions: Array of STRINGs,
+						//	status: STRING,
+						// }
+					});
+				})
+				.catch((e) => console.log(e));
+		} else {
+			console.log("Empty");
+		}
 	}
 
-
-
 	render() {
-		return(
+		return (
 			<div className="tc pa3">
 				<Title />
-				<div className='dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025'>
-					<h1 className="mr2">Registration</h1><br/>
+				<div className="dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025">
+					<h1 className="mr2">Registration</h1>
+					<br />
 					<form onSubmit={this.handleSubmit}>
 						<input
 							className="pa2 ma3 br4"
 							type="text"
 							placeholder="Username"
-							value={this.state.username}
+							value={this.state.name}
 							onChange={this.handleUsernameChange}
 						/>
-						<br/>
+						<br />
 						<input
 							className="pa2 ma3 br4"
 							type="email"
@@ -53,9 +80,9 @@ class Register extends React.Component {
 							value={this.state.email}
 							onChange={this.handleEmailChange}
 						/>
-						<br/>
-						<input 
-							className="pa2 ma3 br2 bg-transparent grow" 
+						<br />
+						<input
+							className="pa2 ma3 br2 bg-transparent grow"
 							type="submit"
 							value="Generate Keys"
 						/>
@@ -64,7 +91,6 @@ class Register extends React.Component {
 			</div>
 		);
 	}
-	
 }
 
 export default Register;
