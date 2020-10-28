@@ -2,14 +2,26 @@ import React, { useState } from "react";
 import { Signing, Payload, Requests, Utils } from "../services";
 
 const register = (name, email) => {
-	// Requests.getPeers().then((res) => console.log(res));
 	if (name !== "" && email !== "") {
 		const keys = Signing.getKeys();
+		// TODO: Display generated keys
+		// keys => {
+		//  publicKey: STRING,
+		//  privateKey: STRING
+		// }
 		const signer = Signing.createSigner(keys);
 		const payload = Payload.createPersonPayload(name, email);
 		Requests.submitPayloads(keys, signer, payload)
-			.then((res) => {
-				console.log(res);
+			.then((data) => {
+				Requests.getBatchStatus(data.link).then((res) => {
+					console.log(res);
+					// TODO: Handle batch status
+					// res => {
+					//  id: STRING,
+					//  invalid_transactions: Array of STRINGs,
+					//	status: STRING,
+					// }
+				});
 			})
 			.catch((e) => console.log(e));
 	} else {

@@ -22,6 +22,8 @@ const encode = (obj) => Buffer.from(JSON.stringify(obj));
 
 const decode = (buf) => JSON.parse(buf.toString());
 
+const decodeBase64 = (buf) => JSON.parse(Buffer.from(buf, "base64").toString());
+
 const hash = (str, length = 128) =>
 	createHash("sha512").update(str).digest("hex").slice(0, length);
 
@@ -56,6 +58,7 @@ export default {
 	TYPES,
 	encode,
 	decode,
+	decodeBase64,
 	hash,
 	getEvidenceAddress,
 	getPersonAddress,

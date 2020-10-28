@@ -6,7 +6,6 @@ import Utils from "./utils";
 // Urls
 const URL = process.env.REACT_APP_REST_API_URL || "http://localhost:4000";
 const BATCHES_URL = "/batches";
-const BATCH_STATUS_URL = "/batch_statuses";
 const STATE_URL = "/state";
 const BLOCKS_URL = "/blocks";
 const TRANSACTIONS_URL = "/transactions";
@@ -23,8 +22,7 @@ const submitPayloads = (keys, signer, payloads) => {
 		.then((res) => res.data);
 };
 
-const getBatchStatus = (id) =>
-	axios.get(`${URL}${BATCH_STATUS_URL}?id=${id}`).then((res) => res.data);
+const getBatchStatus = (link) => axios.get(link).then((res) => res.data[0]);
 
 // States
 const getStates = (prefix, start = null, limit = null, reverse = null) => {
