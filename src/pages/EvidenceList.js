@@ -6,18 +6,19 @@ const EvidenceList = () => {
 	useEffect(() => {
 		(async () => {
 			const response = await Requests.getStates(
-				`${Utils.NAMESPACE}${Utils.TYPE_PREFIXES.PERSON_PREFIX}`
+				`${Utils.NAMESPACE}${Utils.TYPE_PREFIXES.EVIDENCE_PREFIX}`
 			);
 			setList(response.data);
 		})();
 	}, []);
-	// TODO: Design list div
 	return (
 		<div>
 			<h1>List of Evidences</h1>
-			{list.map((e) => (
-				<div key="{`${e.address}`}">{e.address}</div>
-			))}
+			{list.length !== 0 ? (
+				list.map((e) => <div key={e.address}>{e.address}</div>) //TODO: Design div
+			) : (
+				<div>No Evidences Found.</div> // TODO: Design not found div
+			)}
 		</div>
 	);
 };
