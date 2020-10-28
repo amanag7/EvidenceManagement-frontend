@@ -56,6 +56,7 @@ export default {
 	FAMILY_VERSION,
 	NAMESPACE,
 	TYPES,
+	TYPE_PREFIXES,
 	encode,
 	decode,
 	decodeBase64,
