@@ -22,7 +22,7 @@ const submitPayloads = (keys, signer, payloads) => {
 		.then((res) => res.data);
 };
 
-const getBatchStatus = (link) => axios.get(link).then((res) => res.data[0]);
+const getBatchStatus = (link) => axios.get(link).then((res) => res.data);
 
 // States
 const getStates = (prefix, start = null, limit = null, reverse = null) => {

@@ -40,17 +40,23 @@ class Register extends React.Component {
 				this.state.email
 			);
 			Requests.submitPayloads(keys, signer, payload)
-				.then((data) => {
+				.then((data) =>
 					Requests.getBatchStatus(data.link).then((res) => {
-						console.log(res);
 						// TODO: Handle batch status
-						// res => {
+						// res.data => {
 						//  id: STRING,
-						//  invalid_transactions: Array of STRINGs,
+						//  invalid_transactions: [ (Pick array's 0th element for displaying)
+						//	 ...
+						//	  {
+						//      id: STRING,
+						//      message: STRING
+						//    }
+						//	 ...
+						//  ],
 						//	status: STRING,
 						// }
-					});
-				})
+					})
+				)
 				.catch((e) => console.log(e));
 		} else {
 			console.log("Empty");
