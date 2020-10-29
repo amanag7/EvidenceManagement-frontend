@@ -1,6 +1,15 @@
 import React from "react";
 import Title from "../components/Title";
+import Generated from "../components/Generated";
 import { Signing, Payload, Requests } from "../services";
+import { Link } from "react-router-dom";
+
+let publicKey="";
+let privateKey="";
+const setKeys = (k) => {
+		publicKey = k.publicKey;
+		privateKey = k.privateKey;
+}
 
 class Register extends React.Component {
 	constructor(props) {
@@ -9,6 +18,7 @@ class Register extends React.Component {
 		this.state = {
 			name: "",
 			email: "",
+			isSubmitted: false
 		};
 
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -25,15 +35,12 @@ class Register extends React.Component {
 	}
 
 	handleSubmit(event) {
-		// alert(`Hey ${this.state.username} with mail: ${this.state.email}`);
 		event.preventDefault();
+
 		if (this.state.name !== "" && this.state.email !== "") {
+			this.setState({ isSubmitted:true }); 
 			const keys = Signing.getKeys();
-			// TODO: Display generated keys
-			// keys => {
-			//  publicKey: STRING,
-			//  privateKey: STRING
-			// }
+			setKeys(keys);
 			const signer = Signing.createSigner(keys);
 			const payload = Payload.createPersonPayload(
 				this.state.name,
@@ -62,6 +69,7 @@ class Register extends React.Component {
 			console.log("Empty");
 		}
 	}
+
 
 	render() {
 		return (
@@ -94,6 +102,19 @@ class Register extends React.Component {
 						/>
 					</form>
 				</div>
+				{
+					this.state.isSubmitted &&
+					<div>
+						<Generated publicKey={publicKey} privateKey={privateKey}/>
+						<Link
+							className="link"
+							to="/"
+							exact>
+							{" "}
+							Login now{" "}
+						</Link>
+					</div>
+				}
 			</div>
 		);
 	}

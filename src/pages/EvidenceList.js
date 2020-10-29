@@ -1,13 +1,28 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+import ReactTable from "react-table";
+import "react-table/react-table.css"
 import { Requests, Utils } from "../services";
+
+const columns = [
+		{
+			Header: "Evidence Name / Address",
+			accessor: "address",
+		}
+		// TODO: display more columns here like "Added by (user)" and "Date of Submission" in the table.
+		// To be done after getting the data from ipfs.
+]
+
 
 class EvidenceList extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			list: [],
+			list: []
 		};
+
+		this.routeChange = this.routeChange.bind(this);
 	}
 	async componentDidMount() {
 		const response = await Requests.getStates(
@@ -22,8 +37,12 @@ class EvidenceList extends React.Component {
 		//	  }
 		//   ...
 		//  ]
-		//}
+		//} 
 		this.setState({ list: response.data });
+	}	
+	
+	routeChange() {
+		this.props.history.push('/createevidence');
 	}
 
 	render() {
@@ -37,30 +56,47 @@ class EvidenceList extends React.Component {
 					width="auto"
 				/>
 
-				<h1 className="">List of Evidences</h1>
+				<h1 className="tc">List of Evidences</h1>
 				<br />
 
-				<ul>
-					{this.state.list.length !== 0 ? (
-						this.state.list.map((item) => (
-							<li key={item.address}>
-								<div className="dib mt2">
-									<h3>{item.address}</h3>
-								</div>
-								{/* <br />
-								{/* This name item needs to be a link which on clicking shows the evidence's details */}
-								{/* <div className="dib ma3">
-									Date Added: {item.key}
-								</div> */}
-								{/* <div className="dib">
-									Submitted By: {item.user}
-								</div> */}
-							</li>
-						))
+					{this.state.list.length !== 0 ? (	
+							<div className="ma3 br2 pa2">
+							<ReactTable
+								columns={columns}
+								data ={this.state.list}
+								sortable
+								filterable
+								defaultSorted = {this.state.list.address}
+								defaultPageSize = {10}
+								noDataText = {"No evidences found"}
+								minRows= {5}
+								className = "-striped -highlight pointer"
+								getTdProps={(state, rowInfo, column, instance) => {
+									return {
+										onClick: (e, handleOriginal) => {
+											this.props.history.push({
+												pathname: '/evidencedetails',
+												state: {
+													address: rowInfo.original.address,
+													data: rowInfo.original.data
+												}
+											})
+										}
+									}
+								}}
+							/>
+							</div>
+						
 					) : (
-						<div>No Evidences Found.</div> // TODO: Design for not found div
+						<div className="tc ma5 f3 red dim">No Evidences Found.</div>
 					)}
-				</ul>
+
+				<button 
+					className = "pa2 mt5 ma3 br2 bg-transparent grow"
+					onClick = {this.routeChange}
+				>
+					Create Evidence
+				</button>
 			</div>
 		);
 	}

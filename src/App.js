@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import EvidenceList from "./pages/EvidenceList";
 import CreateEvidence from "./pages/CreateEvidence";
-import Generated from "./pages/Generated";
 import EvidenceDetails from "./pages/EvidenceDetails";
 import { Route, Link, Redirect } from "react-router-dom";
 
@@ -55,25 +54,6 @@ class App extends React.Component {
 					exact
 					path="/register"
 					component={Register}
-				/>
-				<Route 
-					exact
-					path="/keygenerated"
-					render={()=> {
-						return(
-							<div>
-								<Generated />
-								<br/>
-								<Link
-									className="link"
-									to="/"
-									exact>
-									{" "}
-									Login now{" "}
-								</Link>
-							</div>
-						);
-					}}
 				/>
 				<Route
 					exact

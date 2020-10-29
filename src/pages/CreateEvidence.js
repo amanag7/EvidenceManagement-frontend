@@ -1,7 +1,8 @@
 import React from 'react';
 import Title from '../components/Title'
+import { withRouter } from "react-router-dom";
 
-// have to add file support
+// TODO: add file support
 
 function getFormattedDate(date) {
     let year = date.getFullYear();
@@ -47,11 +48,14 @@ class CreateEvidence extends React.Component {
 		let date = new Date();
 
 		this.setState({
-			key: getFormattedDate(date), 	// shown as Date Added in the Evidence List (mm-dd-yyyy format)
+			key: getFormattedDate(date), 	// (mm-dd-yyyy format)
 			user:''							// user data to be taken from database
 		})
 
-		alert(`Successfully submitted evidence! Selected file - ${this.fileInput.current.files[0].name}`);
+		// TODO: Store data from here
+
+		alert("Successfully submitted evidence");
+		this.props.history.push('/evidencelist');
 	}
 
 	render() {
