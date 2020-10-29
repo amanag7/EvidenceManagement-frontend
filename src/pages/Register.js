@@ -4,12 +4,12 @@ import Generated from "../components/Generated";
 import { Signing, Payload, Requests } from "../services";
 import { Link } from "react-router-dom";
 
-let publicKey="";
-let privateKey="";
+let publicKey = "";
+let privateKey = "";
 const setKeys = (k) => {
-		publicKey = k.publicKey;
-		privateKey = k.privateKey;
-}
+	publicKey = k.publicKey;
+	privateKey = k.privateKey;
+};
 
 class Register extends React.Component {
 	constructor(props) {
@@ -18,7 +18,7 @@ class Register extends React.Component {
 		this.state = {
 			name: "",
 			email: "",
-			isSubmitted: false
+			isSubmitted: false,
 		};
 
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -38,7 +38,7 @@ class Register extends React.Component {
 		event.preventDefault();
 
 		if (this.state.name !== "" && this.state.email !== "") {
-			this.setState({ isSubmitted:true }); 
+			this.setState({ isSubmitted: true });
 			const keys = Signing.getKeys();
 			setKeys(keys);
 			const signer = Signing.createSigner(keys);
@@ -66,10 +66,10 @@ class Register extends React.Component {
 				)
 				.catch((e) => console.log(e));
 		} else {
+			// TODO: Show error if name or email is empty
 			console.log("Empty");
 		}
 	}
-
 
 	render() {
 		return (
@@ -82,7 +82,7 @@ class Register extends React.Component {
 						<input
 							className="pa2 ma3 br4"
 							type="text"
-							placeholder="Username"
+							placeholder="Full Name"
 							value={this.state.name}
 							onChange={this.handleUsernameChange}
 						/>
@@ -102,19 +102,18 @@ class Register extends React.Component {
 						/>
 					</form>
 				</div>
-				{
-					this.state.isSubmitted &&
+				{this.state.isSubmitted && (
 					<div>
-						<Generated publicKey={publicKey} privateKey={privateKey}/>
-						<Link
-							className="link"
-							to="/"
-							exact>
+						<Generated
+							publicKey={publicKey}
+							privateKey={privateKey}
+						/>
+						<Link className="link" to="/" exact>
 							{" "}
 							Login now{" "}
 						</Link>
 					</div>
-				}
+				)}
 			</div>
 		);
 	}
