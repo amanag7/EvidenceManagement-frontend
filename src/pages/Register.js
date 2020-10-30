@@ -19,6 +19,7 @@ class Register extends React.Component {
 			name: "",
 			email: "",
 			isSubmitted: false,
+			isEmpty: false,
 		};
 
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -38,7 +39,7 @@ class Register extends React.Component {
 		event.preventDefault();
 
 		if (this.state.name !== "" && this.state.email !== "") {
-			this.setState({ isSubmitted: true });
+			this.setState({ isSubmitted: true, isEmpty:false });
 			const keys = Signing.getKeys();
 			setKeys(keys);
 			const signer = Signing.createSigner(keys);
@@ -66,8 +67,7 @@ class Register extends React.Component {
 				)
 				.catch((e) => console.log(e));
 		} else {
-			// TODO: Show error if name or email is empty
-			console.log("Empty");
+			this.setState({ isEmpty:true });
 		}
 	}
 
@@ -75,47 +75,53 @@ class Register extends React.Component {
 		return (
 			<div className="tc pa3">
 				<Title />
-				<div className="dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025">
-					<h1 className="mr2">Registration</h1>
-					<br />
-					<form onSubmit={this.handleSubmit}>
-						<input
-							className="pa2 ma3 br4"
-							type="text"
-							placeholder="Full Name"
-							value={this.state.name}
-							onChange={this.handleUsernameChange}
-						/>
+				{ !this.state.isSubmitted && (
+					<div className="dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025">
+						<h1 className="mr2">Registration</h1>
 						<br />
-						<input
-							className="pa2 ma3 br4"
-							type="email"
-							placeholder="Email"
-							value={this.state.email}
-							onChange={this.handleEmailChange}
-						/>
-						<br />
-						<input
-							className="pa2 ma3 br2 bg-transparent grow"
-							type="submit"
-							value="Generate Keys"
-						/>
-					</form>
-				</div>
+						<form onSubmit={this.handleSubmit}>
+							<input
+								className="pa2 ma3 br4"
+								type="text"
+								placeholder="Full Name"
+								value={this.state.name}
+								onChange={this.handleUsernameChange}
+							/>
+							<br />
+							<input
+								className="pa2 ma3 br4"
+								type="email"
+								placeholder="Email"
+								value={this.state.email}
+								onChange={this.handleEmailChange}
+							/>
+							<br />
+							{this.state.isEmpty && (
+								<div>
+									<p className="tc red">Please fill in the details</p>
+								</div>
+							)}
+							<input
+								className="pa2 ma3 br2 bg-transparent grow"
+								type="submit"
+								value="Generate Keys"
+							/>
+						</form>
+					</div>
+				)}
 				{this.state.isSubmitted && (
 					<div>
+						<Generated
+							publicKey={publicKey}
+							privateKey={privateKey}
+						/>
 						<Link
-							className="link"
 							to="/"
 							exact
 							className="f6 link dim ph3 pv2 mt3 dib white bg-green">
 							{" "}
 							Login now{" "}
 						</Link>
-						<Generated
-							publicKey={publicKey}
-							privateKey={privateKey}
-						/>
 					</div>
 				)}
 			</div>

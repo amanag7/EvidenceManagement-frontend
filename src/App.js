@@ -40,15 +40,6 @@ class App extends React.Component {
 								<Redirect to="/evidencelist"></Redirect>
 							) : null}
 							<Login loginHandle={this.loginHandle} />
-							<br />
-							<Link
-								className="link"
-								to="/register"
-								exact
-								className="f6 link dim ph3 pv2 mh2 dib white bg-green">
-								{" "}
-								Click here to Register{" "}
-							</Link>
 						</div>
 					)}
 				/>

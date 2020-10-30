@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import { IPFS, Requests, Signing, Payload } from "../services";
+import { Link } from "react-router-dom";
 
 class CreateEvidence extends React.Component {
 	constructor(props) {
@@ -13,6 +14,7 @@ class CreateEvidence extends React.Component {
 			details: "",
 			file: null,
 			cid: "",
+			isEmpty: false,
 		};
 
 		this.handleEviNameChange = this.handleEviNameChange.bind(this);
@@ -28,6 +30,7 @@ class CreateEvidence extends React.Component {
 		event.preventDefault();
 		if (this.state.name !== "") {
 			if (this.fileInput.current.files.length !== 0) {
+				this.setState({ isEmpty:false });
 				const file = this.fileInput.current.files[0];
 				const cid = await IPFS.addFile(file);
 				this.setState({ cid });
@@ -61,8 +64,8 @@ class CreateEvidence extends React.Component {
 				// TODO: do this for successful response
 				this.props.history.push("/evidencelist");
 				// TODO: Display two errors
-			} else console.log("No file uploaded");
-		} else console.log("No title of file");
+			} else this.setState({ isEmpty: true});
+		} else this.setState({ isEmpty: true});
 	}
 
 	render() {
@@ -94,9 +97,14 @@ class CreateEvidence extends React.Component {
 							/>
 						</label>
 						<br />
+						{this.state.isEmpty && (
+							<div>
+								<p className="tc mt4 red">Please fill the details or upload file</p>
+							</div>
+						)}
 
 						<input
-							className="pa2 mt5 ma3 br2 bg-transparent grow"
+							className="pa2 mt4 ma3 br2 bg-transparent grow"
 							type="submit"
 							value="Submit Evidence"
 						/>
@@ -108,6 +116,14 @@ class CreateEvidence extends React.Component {
 						) : null}
 					</form>
 				</div>
+				<br />
+				<Link
+					to="/evidencelist"
+					exact
+					className="f6 link dim ph3 pv2 mt3 dib white bg-green">
+					{" "}
+					List of Evidences{" "}
+				</Link>
 			</div>
 		);
 	}

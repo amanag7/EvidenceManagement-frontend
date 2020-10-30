@@ -1,24 +1,21 @@
 import React from "react";
 import Title from "../components/Title";
 import { Signing } from "../services";
+import { Link } from "react-router-dom";
 
 class Login extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			publicKey: "",
 			privateKey: "",
+			isEmpty: false,
 		};
 
-		this.handlePublicKeyChange = this.handlePublicKeyChange.bind(this);
 		this.handlePrivateKeyChange = this.handlePrivateKeyChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	handlePublicKeyChange(event) {
-		this.setState({ publicKey: event.target.value });
-	}
 
 	handlePrivateKeyChange(event) {
 		this.setState({ privateKey: event.target.value });
@@ -27,15 +24,16 @@ class Login extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		if (this.state.privateKey !== "") {
+			this.setState({ isEmpty: false });
 			try {
 				Signing.getKeys(this.state.privateKey);
 				this.props.loginHandle();
 			} catch (e) {
-				// TODO: Handle exception
+				alert("Private Key Invalid!");
 				console.log(e);
 			}
 		} else {
-			// TODO: privatekey empty
+			this.setState({isEmpty: true});
 		}
 	}
 	render() {
@@ -54,6 +52,11 @@ class Login extends React.Component {
 							onChange={this.handlePrivateKeyChange}
 						/>
 						<br />
+						{this.state.isEmpty && (
+							<div>
+								<p className=" tc red">Please enter the private key</p>
+							</div>
+						)}
 						<input
 							className="pa2 ma3 br2 bg-transparent grow"
 							type="submit"
@@ -61,6 +64,14 @@ class Login extends React.Component {
 						/>
 					</form>
 				</div>
+				<br />
+				<Link
+					to="/register"
+					exact
+					className="f6 link dim ph3 pv2 mh2 mt3 dib white bg-green">
+					{" "}
+					Click here to Register{" "}
+				</Link>
 			</div>
 		);
 	}

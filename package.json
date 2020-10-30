@@ -11,8 +11,8 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.0",
     "react-table": "^6.8.6",
-    "react-scripts": "3.4.3",
     "sawtooth-sdk": "^1.0.5",
     "tachyons": "^4.12.0"
   },
