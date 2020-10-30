@@ -17,15 +17,15 @@ class App extends React.Component {
 		};
 
 		this.loginHandle = this.loginHandle.bind(this);
+		this.logoutHandle = this.logoutHandle.bind(this);
 	}
 	componentWillMount() {
 		if (Signing.checkKeys()) this.setState({ loggedIn: true });
 	}
 
-	loginHandle = (publicKey, privateKey) => {
-		//set this state to true only after confirming credentials
-		this.setState({ loggedIn: true });
-	};
+	loginHandle = () => this.setState({ loggedIn: true });
+
+	logoutHandle = () => this.setState({ loggedIn: false });
 
 	render() {
 		return (
@@ -34,30 +34,38 @@ class App extends React.Component {
 					exact
 					strict
 					path="/"
-					render={(props) => {
-						return (
-							<div>
-								{this.state.loggedIn ? (
-									<Redirect to="/evidencelist"></Redirect>
-								) : null}
-								<Login loginHandle={this.loginHandle} />
-								<br />
-								<Link
-									className="link"
-									to="/register"
-									exact>
-									{" "}
-									Click here to Register{" "}
-								</Link>
-							</div>
-						);
-					}}
+					render={(props) => (
+						<div>
+							{this.state.loggedIn ? (
+								<Redirect to="/evidencelist"></Redirect>
+							) : null}
+							<Login loginHandle={this.loginHandle} />
+							<br />
+							<Link
+								className="link"
+								to="/register"
+								exact
+								className="f6 link dim ph3 pv2 mh2 dib white bg-green">
+								{" "}
+								Click here to Register{" "}
+							</Link>
+						</div>
+					)}
 				/>
 				<Route exact path="/register" component={Register} />
 				<Route
 					exact
 					path="/evidencelist"
-					component={EvidenceList}
+					render={(props) => (
+						<div>
+							{!this.state.loggedIn ? (
+								<Redirect to="/"></Redirect>
+							) : null}
+							<EvidenceList
+								logoutHandle={this.logoutHandle}
+							/>
+						</div>
+					)}
 				/>
 				<Route
 					exact

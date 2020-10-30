@@ -104,14 +104,18 @@ class Register extends React.Component {
 				</div>
 				{this.state.isSubmitted && (
 					<div>
+						<Link
+							className="link"
+							to="/"
+							exact
+							className="f6 link dim ph3 pv2 mt3 dib white bg-green">
+							{" "}
+							Login now{" "}
+						</Link>
 						<Generated
 							publicKey={publicKey}
 							privateKey={privateKey}
 						/>
-						<Link className="link" to="/" exact>
-							{" "}
-							Login now{" "}
-						</Link>
 					</div>
 				)}
 			</div>

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { Requests, Utils } from "../services";
+import { Requests, Utils, Signing } from "../services";
 
 const columns = [
 	{
@@ -23,7 +23,9 @@ const columns = [
 		Header: "Download",
 		accessor: "data.cid",
 		Cell: (props) => (
-			<a href={`${process.env.REACT_APP_IPFS_BASE_URL}${props.value}`}>
+			<a
+				class="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue"
+				href={`${process.env.REACT_APP_IPFS_BASE_URL}${props.value}`}>
 				Download
 			</a>
 		),
@@ -36,38 +38,65 @@ class EvidenceList extends React.Component {
 
 		this.state = {
 			list: [],
+			list2: [],
 		};
-
-		this.routeChange = this.routeChange.bind(this);
 	}
 	async componentWillMount() {
 		const response = await Requests.getStates(
 			`${Utils.NAMESPACE}${Utils.TYPE_PREFIXES.EVIDENCE_PREFIX}`
+		);
+		const response2 = await Requests.getStates(
+			`${Utils.NAMESPACE}${Utils.TYPE_PREFIXES.PERSON_PREFIX}`
 		);
 		this.setState({
 			list: response.data.map((item) => ({
 				address: item.address,
 				data: Utils.decodeBase64(item.data),
 			})),
+			list2: response2.data.map((item) => ({
+				address: item.address,
+				data: Utils.decodeBase64(item.data),
+			})),
 		});
 	}
 
-	routeChange() {
-		this.props.history.push("/createevidence");
-	}
+	onLogout = () => {
+		Signing.deleteKeys();
+		this.props.logoutHandle();
+	};
 
 	render() {
 		return (
-			<div className="tc pa3">
-				<img
-					className="grow shadow-5 fl"
-					alt="Evidence Manager Logo"
-					src="./onlylogo.jpg"
-					height="75px"
-					width="auto"
-				/>
+			<div className="tc">
+				<nav class="db dt-l w-100 border-box pa3 ph5-l">
+					<a
+						className="db dtc-l v-mid mid-gray link dim w-100 w-25-l tc tl-l mb2 mb0-l"
+						href="/"
+						title="Home">
+						<img
+							className="grow shadow-5 fl"
+							alt="Evidence Manager Logo"
+							src="./onlylogo.jpg"
+							height="75px"
+							width="auto"
+						/>
+					</a>
+					<h1 className="tc">List of Evidences</h1>
 
-				<h1 className="tc">List of Evidences</h1>
+					<div class="dtc v-mid tr">
+						<a
+							className="f6 link dim ph3 pv2 mh2 dib white bg-green"
+							href="/createevidence">
+							Create Evidence
+						</a>
+						<button
+							className="f6 dim ph3 pv2 mh2 dib white bg-red ba b--black-025"
+							onClick={(e) => this.onLogout()}>
+							Logout
+						</button>
+					</div>
+				</nav>
+
 				<br />
 
 				{this.state.list.length !== 0 ? (
@@ -89,12 +118,6 @@ class EvidenceList extends React.Component {
 						No Evidences Found.
 					</div>
 				)}
-
-				<button
-					className="pa2 mt5 ma3 br2 bg-transparent grow"
-					onClick={this.routeChange}>
-					Create Evidence
-				</button>
 			</div>
 		);
 	}
