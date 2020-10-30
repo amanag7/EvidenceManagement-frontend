@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import Title from "../components/Title";
-
+import { Signing } from "../services";
 
 class Login extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 
 		this.state = {
-			publicKey:'',
-			privateKey:''
+			publicKey: "",
+			privateKey: "",
 		};
 
 		this.handlePublicKeyChange = this.handlePublicKeyChange.bind(this);
@@ -17,35 +17,35 @@ class Login extends React.Component {
 	}
 
 	handlePublicKeyChange(event) {
-		this.setState({publicKey: event.target.value});
+		this.setState({ publicKey: event.target.value });
 	}
 
 	handlePrivateKeyChange(event) {
-		this.setState({privateKey: event.target.value});
+		this.setState({ privateKey: event.target.value });
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
-		
-		// check the credentials here for the public and private keys before calling the loginHandle method
-		this.props.loginHandle();
+		if (this.state.privateKey !== "") {
+			try {
+				Signing.getKeys(this.state.privateKey);
+				this.props.loginHandle();
+			} catch (e) {
+				// TODO: Handle exception
+				console.log(e);
+			}
+		} else {
+			// TODO: privatekey empty
+		}
 	}
-
 	render() {
-		return(
+		return (
 			<div className="tc pa3">
 				<Title />
-				<div className='dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025'>
-					<h1 className="mr2">Login details</h1><br/>
+				<div className="dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025">
+					<h1 className="mr2">Login details</h1>
+					<br />
 					<form onSubmit={this.handleSubmit}>
-						<input
-							className="pa2 ma3 br4"
-							type="text"
-							placeholder="Public Key"
-							value={this.state.publicKey}
-							onChange={this.handlePublicKeyChange}
-						/>
-						<br/>
 						<input
 							className="pa2 ma3 br4"
 							type="password"
@@ -53,9 +53,9 @@ class Login extends React.Component {
 							value={this.state.privateKey}
 							onChange={this.handlePrivateKeyChange}
 						/>
-						<br/>
+						<br />
 						<input
-							className="pa2 ma3 br2 bg-transparent grow" 
+							className="pa2 ma3 br2 bg-transparent grow"
 							type="submit"
 							value="Log in"
 						/>
@@ -64,8 +64,6 @@ class Login extends React.Component {
 			</div>
 		);
 	}
-	
 }
-
 
 export default Login;

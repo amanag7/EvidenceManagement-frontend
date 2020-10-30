@@ -19,6 +19,8 @@ const createKeys = (privateKey = null) => {
 
 const saveKeys = (keys) => localStorage.setItem(KEY_NAME, Utils.encode(keys));
 
+const checkKeys = () => (localStorage.getItem(KEY_NAME) ? true : false);
+
 const deleteKeys = () => localStorage.clear();
 
 const getKeys = (privateKey = null) => {
@@ -42,6 +44,7 @@ const sign = (signer, header) => signer.sign(header);
 
 export default {
 	verifyKeys,
+	checkKeys,
 	createKeys,
 	getKeys,
 	saveKeys,

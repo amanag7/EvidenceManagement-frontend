@@ -14,8 +14,10 @@ const columns = [
 	},
 	{
 		Header: "Created At",
-		accessor: "timestamp",
-		Cell: (props) => <span>{Date(props.value)}</span>,
+		accessor: "data.timestamp",
+		Cell: (props) => (
+			<span>{`${new Date(props.value).toUTCString()}`}</span>
+		),
 	},
 	{
 		Header: "Download",

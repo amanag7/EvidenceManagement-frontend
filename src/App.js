@@ -4,8 +4,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import EvidenceList from "./pages/EvidenceList";
 import CreateEvidence from "./pages/CreateEvidence";
-import EvidenceDetails from "./pages/EvidenceDetails";
 import { Route, Link, Redirect } from "react-router-dom";
+import { Signing } from "./services";
 
 class App extends React.Component {
 	constructor() {
@@ -13,10 +13,13 @@ class App extends React.Component {
 
 		this.state = {
 			loggedIn: false,
-			user: {}
-		}
+			user: {},
+		};
 
-		this.loginHandle = this.loginHandle.bind(this)
+		this.loginHandle = this.loginHandle.bind(this);
+	}
+	componentWillMount() {
+		if (Signing.checkKeys()) this.setState({ loggedIn: true });
 	}
 
 	loginHandle = (publicKey, privateKey) => {
@@ -31,18 +34,18 @@ class App extends React.Component {
 					exact
 					strict
 					path="/"
-					render={props => {
+					render={(props) => {
 						return (
 							<div>
-								<Login
-									loginHandle={this.loginHandle}
-								/>
+								{this.state.loggedIn ? (
+									<Redirect to="/evidencelist"></Redirect>
+								) : null}
+								<Login loginHandle={this.loginHandle} />
 								<br />
 								<Link
 									className="link"
 									to="/register"
-									exact
-								>
+									exact>
 									{" "}
 									Click here to Register{" "}
 								</Link>
@@ -50,11 +53,7 @@ class App extends React.Component {
 						);
 					}}
 				/>
-				<Route
-					exact
-					path="/register"
-					component={Register}
-				/>
+				<Route exact path="/register" component={Register} />
 				<Route
 					exact
 					path="/evidencelist"
@@ -64,11 +63,6 @@ class App extends React.Component {
 					exact
 					path="/createevidence"
 					component={CreateEvidence}
-				/>
-				<Route
-					exact
-					path="/evidencedetails"
-					component={EvidenceDetails}
 				/>
 			</div>
 		);
