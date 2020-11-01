@@ -30,7 +30,7 @@ class CreateEvidence extends React.Component {
 		event.preventDefault();
 		if (this.state.name !== "") {
 			if (this.fileInput.current.files.length !== 0) {
-				this.setState({ isEmpty:false });
+				this.setState({ isEmpty: false });
 				const file = this.fileInput.current.files[0];
 				const cid = await IPFS.addFile(file);
 				this.setState({ cid });
@@ -64,8 +64,8 @@ class CreateEvidence extends React.Component {
 				// TODO: do this for successful response
 				this.props.history.push("/evidencelist");
 				// TODO: Display two errors
-			} else this.setState({ isEmpty: true});
-		} else this.setState({ isEmpty: true});
+			} else this.setState({ isEmpty: true });
+		} else this.setState({ isEmpty: true });
 	}
 
 	render() {
@@ -99,7 +99,10 @@ class CreateEvidence extends React.Component {
 						<br />
 						{this.state.isEmpty && (
 							<div>
-								<p className="tc mt4 red">Please fill the details or upload file</p>
+								<p className="tc mt4 red">
+									Please fill the details or upload
+									file
+								</p>
 							</div>
 						)}
 

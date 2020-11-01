@@ -43,7 +43,18 @@ class App extends React.Component {
 						</div>
 					)}
 				/>
-				<Route exact path="/register" component={Register} />
+				<Route
+					exact
+					path="/register"
+					render={(props) => (
+						<div>
+							{this.state.loggedIn ? (
+								<Redirect to="/evidencelist"></Redirect>
+							) : null}
+							<Register loginHandle={this.loginHandle} />
+						</div>
+					)}
+				/>
 				<Route
 					exact
 					path="/evidencelist"

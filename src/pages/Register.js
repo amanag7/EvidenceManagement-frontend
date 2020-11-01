@@ -39,7 +39,7 @@ class Register extends React.Component {
 		event.preventDefault();
 
 		if (this.state.name !== "" && this.state.email !== "") {
-			this.setState({ isSubmitted: true, isEmpty:false });
+			this.setState({ isSubmitted: true, isEmpty: false });
 			const keys = Signing.getKeys();
 			setKeys(keys);
 			const signer = Signing.createSigner(keys);
@@ -67,7 +67,7 @@ class Register extends React.Component {
 				)
 				.catch((e) => console.log(e));
 		} else {
-			this.setState({ isEmpty:true });
+			this.setState({ isEmpty: true });
 		}
 	}
 
@@ -75,7 +75,7 @@ class Register extends React.Component {
 		return (
 			<div className="tc pa3">
 				<Title />
-				{ !this.state.isSubmitted && (
+				{!this.state.isSubmitted && (
 					<div className="dib b--solid bw1 b--moon-gray mt5 pa3 br4 bg-black-025">
 						<h1 className="mr2">Registration</h1>
 						<br />
@@ -98,7 +98,9 @@ class Register extends React.Component {
 							<br />
 							{this.state.isEmpty && (
 								<div>
-									<p className="tc red">Please fill in the details</p>
+									<p className="tc red">
+										Please fill in the details
+									</p>
 								</div>
 							)}
 							<input
@@ -115,13 +117,11 @@ class Register extends React.Component {
 							publicKey={publicKey}
 							privateKey={privateKey}
 						/>
-						<Link
-							to="/"
-							exact
-							className="f6 link dim ph3 pv2 mt3 dib white bg-green">
-							{" "}
-							Login now{" "}
-						</Link>
+						<button
+							className="f6 dim ph3 pv2 mh2 dib white bg-red ba b--black-025"
+							onClick={(e) => this.props.loginHandle()}>
+							Go To Evidences
+						</button>
 					</div>
 				)}
 			</div>
