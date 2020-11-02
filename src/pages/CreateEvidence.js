@@ -46,24 +46,18 @@ class CreateEvidence extends React.Component {
 					signer,
 					payload
 				);
-
-				const res = await Requests.getBatchStatus(data.link);
-				// TODO: Handle batch status
-				// res.data => {
-				//  id: STRING,
-				//  invalid_transactions: [ (Pick array's 0th element for displaying)
-				//	 ...
-				//	  {
-				//      id: STRING,
-				//      message: STRING
-				//    }
-				//	 ...
-				//  ],
-				//	status: STRING,
-				// }
-				// TODO: do this for successful response
-				this.props.history.push("/evidencelist");
-				// TODO: Display two errors
+				const timer = setInterval(async () => {
+					const res = await Requests.getBatchStatus(data.link);
+					if (res.data[0].status === "COMMITTED") {
+						clearInterval(timer);
+						this.props.history.push("/evidencelist");
+					} else if (res.data[0].status === "INVALID") {
+						alert(
+							res.data[0].invalid_transactions[0].message
+						);
+						clearInterval(timer);
+					}
+				}, 5000);
 			} else this.setState({ isEmpty: true });
 		} else this.setState({ isEmpty: true });
 	}

@@ -2,7 +2,6 @@ import React from "react";
 import Title from "../components/Title";
 import Generated from "../components/Generated";
 import { Signing, Payload, Requests } from "../services";
-import { Link } from "react-router-dom";
 
 let publicKey = "";
 let privateKey = "";
@@ -39,7 +38,7 @@ class Register extends React.Component {
 		event.preventDefault();
 
 		if (this.state.name !== "" && this.state.email !== "") {
-			this.setState({ isSubmitted: true, isEmpty: false });
+			this.setState({ isEmpty: false });
 			const keys = Signing.getKeys();
 			setKeys(keys);
 			const signer = Signing.createSigner(keys);
@@ -48,24 +47,24 @@ class Register extends React.Component {
 				this.state.email
 			);
 			Requests.submitPayloads(keys, signer, payload)
-				.then((data) =>
-					Requests.getBatchStatus(data.link).then((res) => {
-						// TODO: Handle batch status
-						// res.data => {
-						//  id: STRING,
-						//  invalid_transactions: [ (Pick array's 0th element for displaying)
-						//	 ...
-						//	  {
-						//      id: STRING,
-						//      message: STRING
-						//    }
-						//	 ...
-						//  ],
-						//	status: STRING,
-						// }
-					})
-				)
-				.catch((e) => console.log(e));
+				.then((data) => {
+					const timer = setInterval(async () => {
+						const res = await Requests.getBatchStatus(
+							data.link
+						);
+						if (res.data[0].status === "COMMITTED") {
+							clearInterval(timer);
+							this.setState({ isSubmitted: true });
+						} else if (res.data[0].status === "INVALID") {
+							alert(
+								res.data[0].invalid_transactions[0]
+									.message
+							);
+							clearInterval(timer);
+						}
+					}, 5000);
+				})
+				.catch((e) => alert(e));
 		} else {
 			this.setState({ isEmpty: true });
 		}

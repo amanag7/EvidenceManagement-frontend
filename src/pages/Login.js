@@ -16,7 +16,6 @@ class Login extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-
 	handlePrivateKeyChange(event) {
 		this.setState({ privateKey: event.target.value });
 	}
@@ -30,10 +29,9 @@ class Login extends React.Component {
 				this.props.loginHandle();
 			} catch (e) {
 				alert("Private Key Invalid!");
-				console.log(e);
 			}
 		} else {
-			this.setState({isEmpty: true});
+			this.setState({ isEmpty: true });
 		}
 	}
 	render() {
@@ -54,7 +52,9 @@ class Login extends React.Component {
 						<br />
 						{this.state.isEmpty && (
 							<div>
-								<p className=" tc red">Please enter the private key</p>
+								<p className=" tc red">
+									Please enter the private key
+								</p>
 							</div>
 						)}
 						<input
