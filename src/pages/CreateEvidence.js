@@ -56,7 +56,8 @@ class CreateEvidence extends React.Component {
 							res.data[0].invalid_transactions[0].message
 						);
 						clearInterval(timer);
-					}
+					} else if (res.data[0].status === "UNKNOWN")
+						clearInterval(timer);
 				}, 5000);
 			} else this.setState({ isEmpty: true });
 		} else this.setState({ isEmpty: true });

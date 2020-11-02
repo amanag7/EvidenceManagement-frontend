@@ -91,7 +91,16 @@ Make sure you are familiar with Buffer's `from` and `toString` methods.
 <p align="center">
     <img src="/img/list.png" />
 </p>
-
+### Environment Variables
+**In `.env` file**
+```
+REACT_APP_REST_API_URL = "http://localhost:4000" # Sawtooth's Rest Api Proxy 
+REACT_APP_FAMILY_NAME = "evidence_management_system" # Transaction Processor Family Name
+REACT_APP_FAMILY_VERSION = "0.0" # Transaction Processor Family Version
+REACT_APP_EMS_KEYS = "emsKeys" # Local Stroge Key Name
+REACT_APP_IPFS_GATEWAY = "https://ipfs.infura.io:5001/"
+REACT_APP_IPFS_BASE_URL = "https://ipfs.io/ipfs/"
+```
 ### Folder Structure
 
 ```
@@ -141,13 +150,15 @@ cd EvidenceManagement-frontend
 npm i
 ```
 
-4. Run the application
+4. Edit `.env` file according to your environment
+
+5. Run the application
 
 ```
 npm start
 ```
 
-5. Building the application
+6. Building the application
 
 ```
 npm run build:prod

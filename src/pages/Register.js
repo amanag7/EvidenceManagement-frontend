@@ -61,7 +61,8 @@ class Register extends React.Component {
 									.message
 							);
 							clearInterval(timer);
-						}
+						} else if (res.data[0].status === "UNKNOWN")
+							clearInterval(timer);
 					}, 5000);
 				})
 				.catch((e) => alert(e));
